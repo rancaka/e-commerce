@@ -1,16 +1,19 @@
 var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
         app: './app/app.jsx',
-        vendor: ['react', 'react-dom', 'react-redux', 'react-router']
+        vendor: ['react', 'react-dom', 'react-redux', 'react-router'],
+        style: ['./app/styles/app.scss']
     },
     output: {
         path: __dirname,
         filename: 'public/js/app.js'
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'public/js/vendor.js')
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'public/js/vendor.js'),
+        new ExtractTextPlugin('public/css/style.css')
     ],
     resolve: {
         root: __dirname,
@@ -35,7 +38,11 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: 'style-loader!css-loader!'
+                loader: ExtractTextPlugin.extract('style-loader','css-loader')
+            },
+            {
+                test: /\.scss$/,
+                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
             },
             {
                 test: /\.(ttf|eot|svg|woff2?)(\?[a-z0-9]+)?$/,
