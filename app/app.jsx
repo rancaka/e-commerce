@@ -1,5 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Greet from './components/Greet';
+import { Provider } from 'react-redux';
 
-ReactDOM.render(<Greet/>, document.getElementById('app'));
+import routes from 'routes';
+import store from '../app/store/configureStore';
+
+
+ReactDOM.render(
+    <Provider store={store(window.INIT_STATE)}>
+        {routes}
+    </Provider>,
+    document.getElementById('app')
+);

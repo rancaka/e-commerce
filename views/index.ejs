@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <section id="app"><%- app %></section>
+        
+        <script>
+            window.INIT_STATE = <%- JSON.stringify(state) %>
+            window.PROPS = <%- JSON.stringify(props) %>
+        </script>
+        <script src="javascript/vendor.js"></script>
+        <script src="javascript/app.js"></script> 
+    </body>
+</html>
