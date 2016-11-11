@@ -7,10 +7,10 @@ module.exports = {
     },
     output: {
         path: __dirname,
-        filename: 'public/javascript/app.js'
+        filename: 'public/js/app.js'
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin('vendor', 'public/javascript/vendor.js')
+        new webpack.optimize.CommonsChunkPlugin('vendor', 'public/js/vendor.js')
     ],
     resolve: {
         root: __dirname,
@@ -32,6 +32,14 @@ module.exports = {
                 query: {
                     presets: ['es2015', 'react']
                 }
+            },
+            {
+                test: /\.css$/,
+                loader: 'style-loader!css-loader!'
+            },
+            {
+                test: /\.(ttf|eot|svg|woff2?)(\?[a-z0-9]+)?$/,
+                loader: 'url?limit=10000&emitFile=false'   
             }
         ]
     }
