@@ -9,7 +9,12 @@ var store = require('../app/store/configureStore')();
 var actions = require('../app/actions');
 
 router.get('/', (req, res, next) => {
-    store.dispatch(actions.initItems(['Adidas', 'Nike', 'Sperry']));
+    store.dispatch(actions.initItems());
+    next();
+});
+
+router.get('/:_id', (req, res, next) => {
+    store.dispatch(actions.initItem(req.params._id));
     next();
 });
 

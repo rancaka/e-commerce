@@ -9,6 +9,16 @@ var itemsReducer = (state=[], action) => {
     }
 };
 
+var itemReducer = (state={}, action) => {
+    switch(action.type){
+        case 'INIT_ITEM':
+            return Object.assign({}, action.item);
+        default:
+            return state;
+    }
+}
+
 module.exports = {
-    itemsReducer: itemsReducer
+    itemsReducer: itemsReducer,
+    itemReducer: itemReducer
 };

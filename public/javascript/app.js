@@ -67,7 +67,7 @@ webpackJsonp([0],{
 	        Route,
 	        { path: '/', component: AppRoot },
 	        React.createElement(IndexRoute, { component: Home }),
-	        React.createElement(Route, { path: 'detail', component: ItemDetail })
+	        React.createElement(Route, { path: ':_id', component: ItemDetail })
 	    )
 	);
 
@@ -162,8 +162,7 @@ webpackJsonp([0],{
 
 	var React = __webpack_require__(167);
 
-	var _require = __webpack_require__(230),
-	    connect = _require.connect;
+	var ItemList = __webpack_require__(262);
 
 	var Home = function (_React$Component) {
 	    _inherits(Home, _React$Component);
@@ -177,8 +176,6 @@ webpackJsonp([0],{
 	    _createClass(Home, [{
 	        key: 'render',
 	        value: function render() {
-	            var items = this.props.items;
-
 	            return React.createElement(
 	                'div',
 	                null,
@@ -187,12 +184,7 @@ webpackJsonp([0],{
 	                    null,
 	                    'Home page'
 	                ),
-	                React.createElement(
-	                    'p',
-	                    null,
-	                    'Items: ',
-	                    items
-	                )
+	                React.createElement(ItemList, null)
 	            );
 	        }
 	    }]);
@@ -200,11 +192,7 @@ webpackJsonp([0],{
 	    return Home;
 	}(React.Component);
 
-	module.exports = connect(function (state) {
-	    return {
-	        items: state.items
-	    };
-	})(Home);
+	module.exports = Home;
 
 /***/ },
 
@@ -216,14 +204,16 @@ webpackJsonp([0],{
 	var redux = __webpack_require__(237);
 
 	var _require = __webpack_require__(260),
-	    itemsReducer = _require.itemsReducer;
+	    itemsReducer = _require.itemsReducer,
+	    itemReducer = _require.itemReducer;
 
 	function configure() {
 	    var initState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 
 	    var reducer = redux.combineReducers({
-	        items: itemsReducer
+	        items: itemsReducer,
+	        item: itemReducer
 	    });
 
 	    var store = redux.createStore(reducer, initState);
@@ -254,8 +244,21 @@ webpackJsonp([0],{
 	    }
 	};
 
+	var itemReducer = function itemReducer() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'INIT_ITEM':
+	            return Object.assign({}, action.item);
+	        default:
+	            return state;
+	    }
+	};
+
 	module.exports = {
-	    itemsReducer: itemsReducer
+	    itemsReducer: itemsReducer,
+	    itemReducer: itemReducer
 	};
 
 /***/ },
@@ -278,6 +281,9 @@ webpackJsonp([0],{
 	var _require = __webpack_require__(230),
 	    connect = _require.connect;
 
+	var _require2 = __webpack_require__(264),
+	    initItem = _require2.initItem;
+
 	var ItemDetail = function (_React$Component) {
 	    _inherits(ItemDetail, _React$Component);
 
@@ -288,21 +294,37 @@ webpackJsonp([0],{
 	    }
 
 	    _createClass(ItemDetail, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var _props = this.props,
+	                dispatch = _props.dispatch,
+	                routeParams = _props.routeParams;
+
+	            dispatch(initItem(routeParams._id));
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
+	            var _props$item = this.props.item,
+	                _id = _props$item._id,
+	                name = _props$item.name,
+	                price = _props$item.price;
+
+
 	            return React.createElement(
 	                'div',
 	                null,
 	                React.createElement(
 	                    'h1',
 	                    null,
-	                    'This is Item Detail page'
+	                    'This is Item Detail page for: ',
+	                    name
 	                ),
 	                React.createElement(
 	                    'p',
 	                    null,
-	                    'And these are the items: ',
-	                    this.props.items
+	                    'Price: ',
+	                    price
 	                )
 	            );
 	        }
@@ -313,9 +335,213 @@ webpackJsonp([0],{
 
 	module.exports = connect(function (state) {
 	    return {
-	        items: state.items
+	        item: state.item
 	    };
 	})(ItemDetail);
+
+/***/ },
+
+/***/ 262:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(167);
+
+	var _require = __webpack_require__(230),
+	    connect = _require.connect;
+
+	var _require2 = __webpack_require__(264),
+	    initItems = _require2.initItems;
+
+	var Item = __webpack_require__(263);
+
+	var ItemList = function (_React$Component) {
+	    _inherits(ItemList, _React$Component);
+
+	    function ItemList() {
+	        _classCallCheck(this, ItemList);
+
+	        return _possibleConstructorReturn(this, (ItemList.__proto__ || Object.getPrototypeOf(ItemList)).apply(this, arguments));
+	    }
+
+	    _createClass(ItemList, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var dispatch = this.props.dispatch;
+
+	            dispatch(initItems());
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var items = this.props.items;
+
+	            var renderItems = function renderItems() {
+	                return items.map(function (item) {
+	                    return React.createElement(Item, _extends({ key: item._id }, item));
+	                });
+	            };
+
+	            return React.createElement(
+	                'div',
+	                { className: 'item-list' },
+	                renderItems()
+	            );
+	        }
+	    }]);
+
+	    return ItemList;
+	}(React.Component);
+
+	module.exports = connect(function (state) {
+	    return {
+	        items: state.items
+	    };
+	})(ItemList);
+
+/***/ },
+
+/***/ 263:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(167);
+
+	var _require = __webpack_require__(230),
+	    connect = _require.connect;
+
+	var _require2 = __webpack_require__(173),
+	    Link = _require2.Link;
+
+	var Item = function (_React$Component) {
+	    _inherits(Item, _React$Component);
+
+	    function Item() {
+	        _classCallCheck(this, Item);
+
+	        return _possibleConstructorReturn(this, (Item.__proto__ || Object.getPrototypeOf(Item)).apply(this, arguments));
+	    }
+
+	    _createClass(Item, [{
+	        key: 'render',
+	        value: function render() {
+	            var _props = this.props,
+	                _id = _props._id,
+	                name = _props.name,
+	                price = _props.price;
+
+
+	            return React.createElement(
+	                'div',
+	                { className: 'item' },
+	                React.createElement(
+	                    'h2',
+	                    null,
+	                    name
+	                ),
+	                React.createElement(
+	                    'p',
+	                    null,
+	                    'price: ',
+	                    price
+	                ),
+	                React.createElement(
+	                    Link,
+	                    { to: '/' + _id },
+	                    'Show'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Item;
+	}(React.Component);
+
+	module.exports = Item;
+
+/***/ },
+
+/***/ 264:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var ItemAPI = __webpack_require__(265);
+
+	var initItems = function initItems() {
+	    return {
+	        type: 'INIT_ITEMS',
+	        items: ItemAPI.getItems()
+	    };
+	};
+
+	var initItem = function initItem(_id) {
+	    return {
+	        type: 'INIT_ITEM',
+	        item: ItemAPI.getItem(_id)
+	    };
+	};
+
+	module.exports = {
+	    initItems: initItems,
+	    initItem: initItem
+	};
+
+/***/ },
+
+/***/ 265:
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var items = [{
+	    _id: 1,
+	    name: 'Adidas',
+	    price: 1000000
+	}, {
+	    _id: 2,
+	    name: 'Nike',
+	    price: 1250000
+	}, {
+	    _id: 3,
+	    name: 'Dr. Martens',
+	    price: 1750000
+	}];
+
+	var getItems = function getItems() {
+	    return items;
+	};
+
+	var getItem = function getItem(_id) {
+	    return items.find(function (item) {
+	        return item._id == _id;
+	    });
+	};
+
+	module.exports = {
+	    getItems: getItems,
+	    getItem: getItem
+	};
 
 /***/ }
 

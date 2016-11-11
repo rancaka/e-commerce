@@ -1,10 +1,11 @@
 const redux = require('redux');
-const { itemsReducer } = require('../reducers');
+const { itemsReducer, itemReducer } = require('../reducers');
 
 function configure(initState={}){
 
     var reducer = redux.combineReducers({
-        items: itemsReducer
+        items: itemsReducer,
+        item: itemReducer
     });
 
     var store = redux.createStore(

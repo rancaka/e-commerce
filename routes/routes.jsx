@@ -15,7 +15,7 @@ module.exports = (
     <Router history={browserHistory} createElement={createElement}>
         <Route path="/" component={AppRoot}>
             <IndexRoute component={Home} />
-            <Route path="detail" component={ItemDetail} />
+            <Route path=":_id" component={ItemDetail} />
         </Route>
     </Router>
 );
