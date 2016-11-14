@@ -5,7 +5,7 @@ class Admin extends React.Component {
         return (
             <div>
                 <h1>Admin Page</h1>
-                <div class="container">{ this.props.children }</div>
+                <div className="container">{ this.props.children }</div>
             </div>
         );
     }

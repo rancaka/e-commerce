@@ -6,7 +6,6 @@ var { initItem } = require('../actions');
 class ItemDetail extends React.Component {
 
     componentDidMount(){
-        console.log('mounted');
         var { dispatch, routeParams} = this.props;
         dispatch(initItem(routeParams._id));
     }

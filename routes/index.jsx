@@ -8,9 +8,18 @@ var routes = require('./routes.jsx');
 var store = require('../app/store/configureStore')();
 var actions = require('../app/actions');
 
+var Item = require('../Item');
+
 router.get('/', (req, res, next) => {
-    store.dispatch(actions.initItems());
+    store.dispatch(actions.getItems());
     next();
+});
+
+router.get('/api/items', (req, res) => {
+    Item.find({}, (err, items) => {
+        if (err) res.send(404);
+        res.json(items);
+    });
 });
 
 router.get('/a', (req, res, next) => {

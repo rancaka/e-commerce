@@ -4,6 +4,11 @@ var itemsReducer = (state=[], action) => {
             return [
                 ...action.items
             ];
+        case 'ADD_ITEM':
+            return [
+                ...state,
+                action.item
+            ];
         default:
             return state;
     }
@@ -16,7 +21,7 @@ var itemReducer = (state={}, action) => {
         default:
             return state;
     }
-}
+};
 
 module.exports = {
     itemsReducer: itemsReducer,

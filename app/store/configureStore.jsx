@@ -1,4 +1,6 @@
 const redux = require('redux');
+var thunk = require('redux-thunk').default;
+
 const { itemsReducer, itemReducer } = require('../reducers');
 
 function configure(initState={}){
@@ -10,7 +12,10 @@ function configure(initState={}){
 
     var store = redux.createStore(
         reducer,
-        initState
+        initState,
+        redux.compose(
+            redux.applyMiddleware(thunk)
+        )
     );
 
     return store;
