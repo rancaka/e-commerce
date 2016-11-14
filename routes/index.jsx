@@ -4,11 +4,16 @@ var ReactDOMServer = require('react-dom/server');
 var {RouterContext, match} = require('react-router');
 var { Provider } = require('react-redux');
 
-var routes = require('./routes.jsx')
+var routes = require('./routes.jsx');
 var store = require('../app/store/configureStore')();
 var actions = require('../app/actions');
 
 router.get('/', (req, res, next) => {
+    store.dispatch(actions.initItems());
+    next();
+});
+
+router.get('/a', (req, res, next) => {
     store.dispatch(actions.initItems());
     next();
 });

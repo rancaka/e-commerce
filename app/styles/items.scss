@@ -1,0 +1,42 @@
+.item-list {
+    margin-top: 20px;
+    .item {
+        text-align: center;
+        .item-image {
+            border: 1px solid lightblue;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            height: 242.5px;
+            img {
+                background-size: cover;
+            }
+            .item-cover {
+                background:black;
+                height: 242.5px;
+                width: 100%;
+                position: absolute;
+                padding-top: 30px;
+                top: 242.5px;
+                transition: top 0.5s;
+                -webkit-transition: top 0.5s;
+                filter: blur(30%) opacity(50%);
+                -webkit-filter: blur(30%) opacity(50%);
+            }
+        }
+
+        .item-image:hover {
+            .item-cover {
+                top: 0;
+            }
+        }
+        
+        h1 {
+            margin: 5px auto;
+            font-size: 1.2em;
+        }
+
+    }
+
+    
+}

@@ -1,5 +1,5 @@
 var React = require('react');
-var { Link } = require('react-router');
+var { IndexLink } = require('react-router');
 
 class Navbar extends React.Component {
     render(){
@@ -7,7 +7,7 @@ class Navbar extends React.Component {
             <nav className="navbar navbar-default">
                 <div className="container">
                     <div className="navbar-header">
-                        <Link className="navbar-brand" to="/">Brand</Link>
+                        <IndexLink className="navbar-brand" to="/">Brand</IndexLink>
                     </div>
                     <ul className="nav navbar-nav">
                         <li className="active"><a href="#">Link <span className="sr-only">(current)</span></a></li>

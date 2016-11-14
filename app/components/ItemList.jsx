@@ -15,12 +15,14 @@ class ItemList extends React.Component{
         var { items } = this.props;
         var renderItems = () => (
             items.map((item) => (
-                <Item key={item._id} {...item}/>
+                <div className="col-sm-3" key={item._id}>
+                    <Item {...item}/>
+                </div>    
             ))
         );
 
         return (
-            <div className="item-list">
+            <div className="item-list row">
                 {renderItems()}
             </div>
         );
