@@ -1,5 +1,16 @@
 var ItemAPI = require('../api/ItemAPI');
 
+var createItem = (item) => {
+    return (dispatch) => {
+        return ItemAPI.create(item)
+            .then((newItem) => {
+                dispatch(addItem(newItem));
+            }, (err) => {
+                console.log(err);
+            });
+    }
+};
+
 var getItems = () => {
     return (dispatch) => {
         return ItemAPI.getItems()
@@ -8,13 +19,6 @@ var getItems = () => {
             }, (err) => {
                 console.log(err);
             });
-    }
-};
-
-var initItems = (items) => {
-    return {
-        type: 'INIT_ITEMS',
-        items
     }
 };
 
@@ -32,8 +36,16 @@ var addItem = (item) => {
     }
 };
 
+var initItems = (items) => {
+    return {
+        type: 'INIT_ITEMS',
+        items
+    }
+};
+
 module.exports = {
     addItem: addItem,
+    createItem: createItem,
     getItems: getItems,
     initItems: initItems,
     initItem: initItem

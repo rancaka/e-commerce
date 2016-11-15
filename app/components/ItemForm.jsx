@@ -1,7 +1,7 @@
 var React  = require('react');
 var { connect } = require('react-redux');
 
-var { addItem } = require ('../actions');
+var { createItem } = require ('../actions');
 
 class ItemForm extends React.Component {
 
@@ -15,13 +15,15 @@ class ItemForm extends React.Component {
         e.preventDefault();
         var { dispatch } = this.props;
 
-        var item = {
-            _id: 123123123,
-            name: this.name.value,
-            price: this.price.value
-        };
-
-        dispatch(addItem(item));
+        if (this.name.value.length > 0 && this.price.value.length > 0) {
+            let item = {
+                name: this.name.value,
+                price: this.price.value
+            };
+            dispatch(createItem(item));
+            this.name.value = '';
+            this.price.value = ''
+        }
     }
 
     render(){

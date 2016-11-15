@@ -1,5 +1,7 @@
 var React = require('react');
+
 var ItemForm = require('./ItemForm');
+var ItemList = require('./ItemList');
 
 class AdminItems extends React.Component {
     render() {
@@ -8,6 +10,7 @@ class AdminItems extends React.Component {
                 <h1>Admin Items Page</h1>
                 <ItemForm />
                 <hr />
+                <ItemList />
             </div>
         );
     }
