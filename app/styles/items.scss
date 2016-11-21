@@ -1,7 +1,6 @@
 .item-list {
     margin-top: 20px;
     .item {
-        text-align: center;
         .item-image {
             border: 1px solid lightblue;
             cursor: pointer;
@@ -12,6 +11,8 @@
                 background-size: cover;
             }
             .item-cover {
+                text-align: center;
+                color: white;
                 background:black;
                 height: 242.5px;
                 width: 100%;

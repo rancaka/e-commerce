@@ -8,7 +8,7 @@ var routes = require('./routes.jsx');
 var store = require('../app/store/configureStore')();
 var actions = require('../app/actions');
 
-var ItemAPI = require('./ItemAPI');
+var ItemAPI = require('./items/ItemAPI');
 
 router.get('/', (req, res, next) => {
     store.dispatch(actions.getItems());
@@ -20,11 +20,13 @@ router.get('/a', (req, res, next) => {
     next();
 });
 
-ItemAPI.getItems(router);
 ItemAPI.create(router);
+ItemAPI.find(router);
+ItemAPI.get(router);
+ItemAPI.update(router);
 
 router.get('/:_id', (req, res, next) => {
-    store.dispatch(actions.initItem(req.params._id));
+    store.dispatch(actions.findItem(req.params._id));
     next();
 });
 

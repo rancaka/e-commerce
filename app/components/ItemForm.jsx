@@ -1,7 +1,7 @@
 var React  = require('react');
 var { connect } = require('react-redux');
 
-var { createItem } = require ('../actions');
+var { createItem, updateItem } = require ('../actions');
 
 class ItemForm extends React.Component {
 
@@ -13,20 +13,34 @@ class ItemForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        var { dispatch } = this.props;
+        var {_id, name, price, dispatch } = this.props;
 
         if (this.name.value.length > 0 && this.price.value.length > 0) {
             let item = {
-                name: this.name.value,
-                price: this.price.value
+                _id: null || _id,
+                name: this.name.value || name,
+                price: this.price.value || price
             };
-            dispatch(createItem(item));
-            this.name.value = '';
-            this.price.value = ''
+
+            switch (this.props.type) {
+                case 'Create':
+                    dispatch(createItem(item));
+                    this.name.value = '';
+                    this.price.value = '';
+                    break;
+                case 'Update':
+                    dispatch(updateItem(item));
+                    jQuery(`#${_id}`).modal('hide');
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     render(){
+        var {name, price, type} = this.props;
+
         return (
             <div className="row">
                 <div className="col-sm-6">
@@ -35,14 +49,18 @@ class ItemForm extends React.Component {
                 <div className="col-sm-6">
                     <form onSubmit={this.handleSubmit}>
                         <div className="form-group">
-                            <label htmlFor="name">Name:</label>
-                            <input ref={name => this.name = name} type="text" placeholder="Enter item's name..." className="form-control" id="name"/>
+                            <label style={{width: '100%'}}>
+                                Name:
+                                <input ref={name => this.name = name} type="text" defaultValue={name} placeholder="Enter item's name..." className="form-control"/>
+                            </label>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="price">Price:</label>
-                            <input ref={price => this.price = price} type="number" placeholder="Enter item's price..." className="form-control" id="price"/>
+                            <label style={{width: '100%'}}>
+                                Price:
+                                <input ref={price => this.price = price} type="number" defaultValue={price} placeholder="Enter item's price..." className="form-control"/>
+                            </label>
                         </div>
-                        <button className="btn btn-primary form-control">Add</button>
+                        <button className="btn btn-primary form-control">{ type }</button>
                     </form>
                 </div>
             </div>

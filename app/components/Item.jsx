@@ -1,8 +1,20 @@
 var React = require('react');
-var { connect } = require('react-redux');
+var ReactDOM = require('react-dom');
 var { Link } = require('react-router');
 
+var ItemEditForm = require('./ItemEditForm');
+
 class Item extends React.Component {
+
+    constructor(){
+        super();
+        this.openEditForm = this.openEditForm.bind(this);
+    }
+
+    openEditForm() {
+        jQuery(`#${this.props._id}`).modal('show');
+    }
+
     render(){
         var {_id, name, price, picUrl} = this.props;
 
@@ -14,10 +26,12 @@ class Item extends React.Component {
                         <h1>{name}</h1>
                         <p>{ price }</p>
                         <Link to={`/${_id}`} className="btn btn-success">Detail</Link>
+                        <button className="btn btn-primary" onClick={ this.openEditForm }>Edit</button>
                     </div>
                 </div>
                 <h1>{name}</h1>
                 <p>{ price }</p>
+                <ItemEditForm {...this.props}/>
             </div>
         );
     }

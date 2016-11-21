@@ -8,7 +8,7 @@ class AdminItems extends React.Component {
         return (
             <div>
                 <h1>Admin Items Page</h1>
-                <ItemForm />
+                <ItemForm type="Create" />
                 <hr />
                 <ItemList />
             </div>

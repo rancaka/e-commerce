@@ -4,13 +4,20 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
     entry: {
         app: './app/app.jsx',
-        vendor: ['react', 'react-dom', 'react-redux', 'react-router']
+        vendor: ['react', 'react-dom', 'react-router', 'react-redux', 'redux-thunk', 'axios', 'bootstrap/dist/js/bootstrap.min']
     },
     output: {
         path: __dirname,
-        filename: 'public/js/app.js'
+        filename: 'public/js/[name].js'
+    },
+    externals: {
+        jquery: 'jQuery'
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            '$': 'jquery',
+            'jQuery': 'jquery'
+        }),
         new webpack.optimize.CommonsChunkPlugin('vendor', 'public/js/vendor.js'),
         new ExtractTextPlugin('public/css/style.css')
     ],
@@ -49,4 +56,4 @@ module.exports = {
             }
         ]
     }
-}
+};

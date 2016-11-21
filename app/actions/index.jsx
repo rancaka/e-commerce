@@ -1,52 +1,83 @@
 var ItemAPI = require('../api/ItemAPI');
 
-var createItem = (item) => {
+module.exports = {
+    createItem: createItem,
+    findItem: findItem,
+    getItems: getItems,
+    updateItem: updateItem
+};
+
+function createItem(item) {
     return (dispatch) => {
         return ItemAPI.create(item)
             .then((newItem) => {
-                dispatch(addItem(newItem));
+                dispatch(_createItem(newItem));
             }, (err) => {
                 console.log(err);
             });
     }
-};
+}
 
-var getItems = () => {
+function findItem(_id) {
     return (dispatch) => {
-        return ItemAPI.getItems()
-            .then((items) => {
-                dispatch(initItems(items));
+        return ItemAPI.find(_id)
+            .then((item) => {
+                dispatch(_findItem(item));
             }, (err) => {
                 console.log(err);
             });
     }
-};
+}
 
-var initItem = (_id) => {
-    return {
-        type: 'INIT_ITEM',
-        item: ItemAPI.getItem(_id)
+function getItems() {
+    return (dispatch) => {
+        return ItemAPI.get()
+            .then((items) => {
+                dispatch(_getItems(items));
+            }, (err) => {
+                console.log(err);
+            });
     }
-};
+}
 
-var addItem = (item) => {
+function updateItem(item) {
+    return (dispatch) => {
+        return ItemAPI.update(item)
+            .then((updatedItem) => {
+                dispatch(_updateItem(updatedItem));
+            }, (err) => {
+                console.log(err);
+            });
+    }
+}
+
+//Private actions
+//Use this after getting data from API
+//======================================================================================================================
+function _createItem(item) {
     return {
-        type: 'ADD_ITEM',
+        type: 'CREATE_ITEM',
         item
     }
-};
+}
 
-var initItems = (items) => {
+function _findItem(item) {
     return {
-        type: 'INIT_ITEMS',
+        type: 'FIND_ITEM',
+        item
+    }
+}
+
+function _getItems(items) {
+    return {
+        type: 'GET_ITEMS',
         items
     }
-};
+}
 
-module.exports = {
-    addItem: addItem,
-    createItem: createItem,
-    getItems: getItems,
-    initItems: initItems,
-    initItem: initItem
-};
+function _updateItem(updatedItem) {
+    return {
+        type: 'UPDATE_ITEM',
+        updatedItem
+    }
+}

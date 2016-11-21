@@ -1,17 +1,17 @@
 var React = require('react');
 var { connect } = require('react-redux');
 
-var { initItem } = require('../actions');
+var { findItem } = require('../actions');
 
 class ItemDetail extends React.Component {
 
     componentDidMount(){
         var { dispatch, routeParams} = this.props;
-        dispatch(initItem(routeParams._id));
+        dispatch(findItem(routeParams._id));
     }
 
     render(){
-        var {_id, name, price} = this.props.item;
+        var {name, price} = this.props.item;
 
         return (
             <div>
