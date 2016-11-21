@@ -11,9 +11,13 @@ function itemsReducer (state=[], action) {
             ];
         case 'CREATE_ITEM':
             return [
-                ...state,
-                action.item
+                action.item,
+                ...state
             ];
+        case 'REMOVE_ITEM':
+            return state.filter((item) => {
+                return item._id !== action._id;
+            });
         case 'UPDATE_ITEM':
             return state.map((item) => {
                 if (item._id === action.updatedItem._id) {

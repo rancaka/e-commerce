@@ -4,6 +4,7 @@ module.exports = {
     createItem: createItem,
     findItem: findItem,
     getItems: getItems,
+    removeItem: removeItem,
     updateItem: updateItem
 };
 
@@ -34,6 +35,17 @@ function getItems() {
         return ItemAPI.get()
             .then((items) => {
                 dispatch(_getItems(items));
+            }, (err) => {
+                console.log(err);
+            });
+    }
+}
+
+function removeItem(_id) {
+    return (dispatch) => {
+        return ItemAPI.remove(_id)
+            .then(() => {
+                dispatch(_removeItem(_id));
             }, (err) => {
                 console.log(err);
             });
@@ -72,6 +84,13 @@ function _getItems(items) {
     return {
         type: 'GET_ITEMS',
         items
+    }
+}
+
+function _removeItem(_id) {
+    return {
+        type: 'REMOVE_ITEM',
+        _id
     }
 }
 

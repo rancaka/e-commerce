@@ -23,6 +23,7 @@ router.get('/a', (req, res, next) => {
 ItemAPI.create(router);
 ItemAPI.find(router);
 ItemAPI.get(router);
+ItemAPI.remove(router);
 ItemAPI.update(router);
 
 router.get('/:_id', (req, res, next) => {

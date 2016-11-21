@@ -1,18 +1,26 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var { Link } = require('react-router');
+var { connect } = require('react-redux');
 
 var ItemEditForm = require('./ItemEditForm');
+var { removeItem } = require('../actions');
 
 class Item extends React.Component {
 
     constructor(){
         super();
         this.openEditForm = this.openEditForm.bind(this);
+        this.removeItem = this.removeItem.bind(this);
     }
 
     openEditForm() {
         jQuery(`#${this.props._id}`).modal('show');
+    }
+
+    removeItem() {
+        var { _id, dispatch } = this.props;
+        dispatch(removeItem(_id));
     }
 
     render(){
@@ -27,6 +35,7 @@ class Item extends React.Component {
                         <p>{ price }</p>
                         <Link to={`/${_id}`} className="btn btn-success">Detail</Link>
                         <button className="btn btn-primary" onClick={ this.openEditForm }>Edit</button>
+                        <button className="btn btn-danger" onClick={ this.removeItem }>Delete</button>
                     </div>
                 </div>
                 <h1>{name}</h1>
@@ -37,4 +46,4 @@ class Item extends React.Component {
     }
 }
 
-module.exports = Item;
+module.exports = connect()(Item);

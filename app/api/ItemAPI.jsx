@@ -6,6 +6,7 @@ module.exports = {
     create: create,
     find: find,
     get: get,
+    remove: remove,
     update: update
 
 };
@@ -35,6 +36,15 @@ function get() {
         }, (err) => {
             throw err;
         });
+}
+
+function remove(_id) {
+    return axios.delete(`${rootUrl}/api/item/${_id}`)
+        .then((status) => {
+            return status.data;
+        }, (err) => {
+            throw err;
+        })
 }
 
 function update(item) {

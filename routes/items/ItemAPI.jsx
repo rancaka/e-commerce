@@ -6,6 +6,7 @@ module.exports = {
     create: create,
     find: find,
     get: get,
+    remove: remove,
     update: update
 };
 
@@ -29,6 +30,14 @@ function get(router) {
     router.get('/api/items', (req, res) => {
         Item.find({}, (err, items) => {
             res.json(items);
+        }).sort({ updatedAt: -1 });
+    });
+}
+
+function remove(router) {
+    router.delete('/api/item/:_id', (req, res) => {
+        Item.remove({ _id: req.params._id }, (err, status) => {
+            res.json(status);
         });
     });
 }
