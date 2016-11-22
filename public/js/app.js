@@ -593,7 +593,9 @@ webpackJsonp([0],[
 
 	'use strict';
 
-	var ItemAPI = __webpack_require__(261);
+	var axios = __webpack_require__(262);
+
+	var rootUrl = 'http://localhost:3000';
 
 	module.exports = {
 	    createItem: createItem,
@@ -605,50 +607,48 @@ webpackJsonp([0],[
 
 	function createItem(item) {
 	    return function (dispatch) {
-	        return ItemAPI.create(item).then(function (newItem) {
-	            dispatch(_createItem(newItem));
+	        return axios.post(rootUrl + '/api/items', { item: item }).then(function (newItem) {
+	            dispatch(_createItem(newItem.data));
 	        }, function (err) {
-	            console.log(err);
+	            throw err;
 	        });
 	    };
 	}
 
 	function findItem(_id) {
 	    return function (dispatch) {
-	        return ItemAPI.find(_id).then(function (item) {
-	            dispatch(_findItem(item));
-	        }, function (err) {
-	            console.log(err);
-	        });
+	        return axios.get(rootUrl + '/api/item/' + _id).then(function (item) {
+	            dispatch(_findItem(item.data));
+	        }, function (err) {});
 	    };
 	}
 
 	function getItems() {
 	    return function (dispatch) {
-	        return ItemAPI.get().then(function (items) {
-	            dispatch(_getItems(items));
+	        return axios.get(rootUrl + '/api/items').then(function (items) {
+	            dispatch(_getItems(items.data));
 	        }, function (err) {
-	            console.log(err);
+	            throw err;
 	        });
 	    };
 	}
 
 	function removeItem(_id) {
 	    return function (dispatch) {
-	        return ItemAPI.remove(_id).then(function () {
+	        return axios.delete(rootUrl + '/api/item/' + _id).then(function (status) {
 	            dispatch(_removeItem(_id));
 	        }, function (err) {
-	            console.log(err);
+	            throw err;
 	        });
 	    };
 	}
 
 	function updateItem(item) {
 	    return function (dispatch) {
-	        return ItemAPI.update(item).then(function (updatedItem) {
-	            dispatch(_updateItem(updatedItem));
+	        return axios.put(rootUrl + '/api/item/' + item._id, { item: item }).then(function (updatedItem) {
+	            dispatch(_updateItem(updatedItem.data));
 	        }, function (err) {
-	            console.log(err);
+	            throw err;
 	        });
 	    };
 	}
@@ -692,65 +692,7 @@ webpackJsonp([0],[
 	}
 
 /***/ },
-/* 261 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var axios = __webpack_require__(262);
-
-	var rootUrl = 'http://localhost:3000';
-
-	module.exports = {
-	    create: create,
-	    find: find,
-	    get: get,
-	    remove: remove,
-	    update: update
-
-	};
-
-	function create(item) {
-	    return axios.post(rootUrl + '/api/items', { item: item }).then(function (newItem) {
-	        return newItem.data;
-	    }, function (err) {
-	        throw err;
-	    });
-	}
-
-	function find(_id) {
-	    return axios.get(rootUrl + '/api/item/' + _id).then(function (item) {
-	        return item.data;
-	    }, function (err) {
-	        throw err;
-	    });
-	}
-
-	function get() {
-	    return axios.get(rootUrl + '/api/items').then(function (items) {
-	        return items.data;
-	    }, function (err) {
-	        throw err;
-	    });
-	}
-
-	function remove(_id) {
-	    return axios.delete(rootUrl + '/api/item/' + _id).then(function (status) {
-	        return status.data;
-	    }, function (err) {
-	        throw err;
-	    });
-	}
-
-	function update(item) {
-	    return axios.put(rootUrl + '/api/item/' + item._id, { item: item }).then(function (updatedItem) {
-	        return updatedItem.data;
-	    }, function (err) {
-	        throw err;
-	    });
-	}
-
-/***/ },
+/* 261 */,
 /* 262 */,
 /* 263 */,
 /* 264 */,

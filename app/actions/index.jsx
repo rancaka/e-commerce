@@ -1,4 +1,6 @@
-var ItemAPI = require('../api/ItemAPI');
+var axios = require('axios');
+
+const rootUrl = 'http://localhost:3000';
 
 module.exports = {
     createItem: createItem,
@@ -10,56 +12,51 @@ module.exports = {
 
 function createItem(item) {
     return (dispatch) => {
-        return ItemAPI.create(item)
-            .then((newItem) => {
-                dispatch(_createItem(newItem));
-            }, (err) => {
-                console.log(err);
-            });
+        return axios.post(`${rootUrl}/api/items`, { item }).then((newItem) => {
+            dispatch(_createItem(newItem.data));
+        }, (err) => {
+            throw err;
+        });
     }
 }
 
 function findItem(_id) {
     return (dispatch) => {
-        return ItemAPI.find(_id)
-            .then((item) => {
-                dispatch(_findItem(item));
-            }, (err) => {
-                console.log(err);
-            });
+        return axios.get(`${rootUrl}/api/item/${_id}`).then((item) => {
+            dispatch(_findItem(item.data));
+        }, (err) => {
+
+        });
     }
 }
 
 function getItems() {
     return (dispatch) => {
-        return ItemAPI.get()
-            .then((items) => {
-                dispatch(_getItems(items));
-            }, (err) => {
-                console.log(err);
-            });
+        return axios.get(`${rootUrl}/api/items`).then((items) => {
+            dispatch(_getItems(items.data));
+        }, (err) => {
+            throw err;
+        });
     }
 }
 
 function removeItem(_id) {
     return (dispatch) => {
-        return ItemAPI.remove(_id)
-            .then(() => {
-                dispatch(_removeItem(_id));
-            }, (err) => {
-                console.log(err);
-            });
+        return axios.delete(`${rootUrl}/api/item/${_id}`).then((status) => {
+            dispatch(_removeItem(_id));
+        }, (err) => {
+            throw err;
+        });
     }
 }
 
 function updateItem(item) {
     return (dispatch) => {
-        return ItemAPI.update(item)
-            .then((updatedItem) => {
-                dispatch(_updateItem(updatedItem));
-            }, (err) => {
-                console.log(err);
-            });
+        return axios.put(`${rootUrl}/api/item/${item._id}`, { item }).then((updatedItem) => {
+            dispatch(_updateItem(updatedItem.data));
+        }, (err) => {
+            throw err;
+        });
     }
 }
 
