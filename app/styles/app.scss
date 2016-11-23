@@ -2,3 +2,17 @@
 
 @import 'items';
 @import 'category-list';
+
+.img-container {
+  background: #ddd;
+  width: 106.75px;
+  height: 106.75px;
+  overflow: hidden;
+  display: block;
+  input {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+}

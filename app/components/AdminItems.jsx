@@ -7,7 +7,6 @@ class AdminItems extends React.Component {
     render() {
         return (
             <div>
-                <h1>Admin Items Page</h1>
                 <ItemForm type="Create" />
                 <hr />
                 <ItemList />

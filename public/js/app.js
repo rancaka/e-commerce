@@ -952,11 +952,55 @@ webpackJsonp([0],[
 
 	        var _this = _possibleConstructorReturn(this, (ItemForm.__proto__ || Object.getPrototypeOf(ItemForm)).call(this));
 
+	        _this.state = {
+	            cover: '',
+	            images: [],
+	            warningMessage: ''
+	        };
+	        _this.setCover = _this.setCover.bind(_this);
+	        _this.chooseImage = _this.chooseImage.bind(_this);
 	        _this.handleSubmit = _this.handleSubmit.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(ItemForm, [{
+	        key: 'setCover',
+	        value: function setCover(image) {
+	            var _this2 = this;
+
+	            return function () {
+	                _this2.setState({
+	                    cover: image
+	                });
+	            };
+	        }
+	    }, {
+	        key: 'chooseImage',
+	        value: function chooseImage(e) {
+	            var _this3 = this;
+
+	            var images = e.target.files;
+
+	            if (images.length > 4) {
+	                this.setState({ warningMessage: 'You choose ' + images.length + ' files. Only 4 files allowed!' });
+	            }
+
+	            for (var i = 0; i < 4; i++) {
+	                if (images[i].type.match('image.*')) {
+	                    var reader = new FileReader();
+
+	                    reader.onload = function (e) {
+	                        _this3.setState({
+	                            images: _this3.state.images.concat(e.target.result)
+	                        });
+	                        console.log(_this3.state.images);
+	                    };
+
+	                    reader.readAsDataURL(images[i]);
+	                }
+	            }
+	        }
+	    }, {
 	        key: 'handleSubmit',
 	        value: function handleSubmit(e) {
 	            e.preventDefault();
@@ -992,21 +1036,44 @@ webpackJsonp([0],[
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var _this2 = this;
+	            var _this4 = this;
 
 	            var _props2 = this.props,
 	                name = _props2.name,
 	                price = _props2.price,
 	                type = _props2.type;
+	            var _state = this.state,
+	                cover = _state.cover,
+	                images = _state.images,
+	                warningMessage = _state.warningMessage;
 
+
+	            var renderImages = function renderImages() {
+	                return images.map(function (image, index) {
+	                    return React.createElement(
+	                        'div',
+	                        { className: 'col-sm-3', key: index },
+	                        React.createElement('img', { src: image, className: 'img-responsive' }),
+	                        React.createElement(
+	                            'button',
+	                            { onClick: _this4.setCover(image), className: 'btn btn-success' },
+	                            'Cover'
+	                        )
+	                    );
+	                });
+	            };
 
 	            return React.createElement(
 	                'div',
 	                { className: 'row' },
-	                React.createElement('div', { className: 'col-sm-6' }),
 	                React.createElement(
 	                    'div',
-	                    { className: 'col-sm-6' },
+	                    { className: 'col-sm-offset-2 col-sm-4' },
+	                    React.createElement('img', { className: 'img-responsive', src: cover })
+	                ),
+	                React.createElement(
+	                    'div',
+	                    { className: 'col-sm-4' },
 	                    React.createElement(
 	                        'form',
 	                        { onSubmit: this.handleSubmit },
@@ -1018,7 +1085,7 @@ webpackJsonp([0],[
 	                                { style: { width: '100%' } },
 	                                'Name:',
 	                                React.createElement('input', { ref: function ref(name) {
-	                                        return _this2.name = name;
+	                                        return _this4.name = name;
 	                                    }, type: 'text', defaultValue: name, placeholder: 'Enter item\'s name...', className: 'form-control' })
 	                            )
 	                        ),
@@ -1030,8 +1097,23 @@ webpackJsonp([0],[
 	                                { style: { width: '100%' } },
 	                                'Price:',
 	                                React.createElement('input', { ref: function ref(price) {
-	                                        return _this2.price = price;
+	                                        return _this4.price = price;
 	                                    }, type: 'number', defaultValue: price, placeholder: 'Enter item\'s price...', className: 'form-control' })
+	                            )
+	                        ),
+	                        React.createElement(
+	                            'div',
+	                            { className: 'form-group' },
+	                            React.createElement('input', { onChange: this.chooseImage, type: 'file', multiple: true, max: '4' }),
+	                            React.createElement(
+	                                'p',
+	                                null,
+	                                warningMessage
+	                            ),
+	                            React.createElement(
+	                                'div',
+	                                { className: 'row' },
+	                                renderImages()
 	                            )
 	                        ),
 	                        React.createElement(
@@ -1135,11 +1217,6 @@ webpackJsonp([0],[
 	            return React.createElement(
 	                'div',
 	                null,
-	                React.createElement(
-	                    'h1',
-	                    null,
-	                    'Admin Items Page'
-	                ),
 	                React.createElement(ItemForm, { type: 'Create' }),
 	                React.createElement('hr', null),
 	                React.createElement(ItemList, null)
