@@ -5,11 +5,11 @@ var { createItem, updateItem } = require ('../actions');
 
 class ItemForm extends React.Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.state = {
-            cover: '',
+            cover: this.props.cover || '',
             images: [],
             warningMessage: ''
         };
@@ -19,7 +19,8 @@ class ItemForm extends React.Component {
     }
 
     setCover(image){
-        return () => {
+        return (e) => {
+            e.preventDefault();
             this.setState({
                 cover: image
             });
@@ -28,36 +29,45 @@ class ItemForm extends React.Component {
 
     chooseImage(e){
         var images = e.target.files;
+        var imagesLength = images.length;
 
-        if (images.length > 4) {
+        if (imagesLength > 4) {
             this.setState({ warningMessage: `You choose ${images.length} files. Only 4 files allowed!`});
         }
 
-        for (var i=0; i<4; i++) {
-            if (images[i].type.match('image.*')) {
-                var reader = new FileReader();
+        for (var i=0, image; image = images[i]; i++) {
 
-                reader.onload = (e) => {
+            if (i === 4) break;
+            if (!image.type.match('image.*')) continue;
+
+            var reader = new FileReader();
+
+            reader.onload = ((image) => {
+                return (e) => {
                     this.setState({
-                        images: this.state.images.concat(e.target.result)
+                        images: this.state.images.concat({
+                            name: image.name,
+                            base64: e.target.result
+                        })
                     });
-                    console.log(this.state.images);
-                };
+                }
+            })(image);
 
-                reader.readAsDataURL(images[i]);
-            }
+            reader.readAsDataURL(image);
         }
     }
 
     handleSubmit(e) {
         e.preventDefault();
-        var {_id, name, price, dispatch } = this.props;
+        var { _id, name, price, images, dispatch } = this.props;
 
         if (this.name.value.length > 0 && this.price.value.length > 0) {
             let item = {
                 _id: null || _id,
                 name: this.name.value || name,
-                price: this.price.value || price
+                price: this.price.value || price,
+                cover: this.state.cover.name,
+                images: this.state.images || images
             };
 
             switch (this.props.type) {
@@ -83,7 +93,7 @@ class ItemForm extends React.Component {
         var renderImages = () => (
             images.map((image, index) => (
                 <div className="col-sm-3" key={index}>
-                    <img src={image} className="img-responsive" />
+                    <img src={image.base64} className="img-responsive" />
                     <button onClick={this.setCover(image)} className="btn btn-success">Cover</button>
                 </div>
             ))
@@ -92,7 +102,7 @@ class ItemForm extends React.Component {
         return (
             <div className="row">
                 <div className="col-sm-offset-2 col-sm-4">
-                    <img className="img-responsive" src={cover}/>
+                    <img className="img-responsive" src={cover.base64}/>
                 </div>
                 <div className="col-sm-4">
                     <form onSubmit={this.handleSubmit}>

@@ -1,4 +1,5 @@
-var bodyParserJSON = require('body-parser').json({extended: true});
+var fs = require('fs');
+var bodyParserJSON = require('body-parser').json({extended: true, limit: '10mb'});
 
 var Item = require('./Item');
 
@@ -12,6 +13,20 @@ module.exports = {
 
 function create(router) {
     router.post('/api/items', bodyParserJSON, (req, res) => {
+        var itemImages = req.body.item.images;
+        itemImages.forEach((image) => {
+            image.base64 = image.base64.replace(/^data:image\/(jpeg|png);base64,/, "");
+            fs.writeFile(`public/images/${image.name}`, image.base64, 'base64', (err) => {
+                console.log(err);
+            });
+        });
+
+        req.body.item.images = itemImages.map((image) => {
+            return `http://localhost:3000/images/${image.name}`;
+        });
+
+        req.body.item.cover = `http://localhost:3000/images/${req.body.item.cover}`;
+
         Item.create(req.body.item, (err, newItem) => {
             res.json(newItem);
         });

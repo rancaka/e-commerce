@@ -24,12 +24,12 @@ class Item extends React.Component {
     }
 
     render(){
-        var {_id, name, price, picUrl} = this.props;
+        var {_id, name, price, cover} = this.props;
 
         return (
             <div className="item">
                 <div className="item-image">
-                    <img className="img-responsive" src={picUrl} />
+                    <img className="img-responsive" src={cover} />
                     <div className="item-cover">
                         <h1>{name}</h1>
                         <p>{ price }</p>

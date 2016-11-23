@@ -779,7 +779,7 @@ webpackJsonp([0],[
 	                _id = _props2._id,
 	                name = _props2.name,
 	                price = _props2.price,
-	                picUrl = _props2.picUrl;
+	                cover = _props2.cover;
 
 
 	            return React.createElement(
@@ -788,7 +788,7 @@ webpackJsonp([0],[
 	                React.createElement(
 	                    'div',
 	                    { className: 'item-image' },
-	                    React.createElement('img', { className: 'img-responsive', src: picUrl }),
+	                    React.createElement('img', { className: 'img-responsive', src: cover }),
 	                    React.createElement(
 	                        'div',
 	                        { className: 'item-cover' },
@@ -947,13 +947,13 @@ webpackJsonp([0],[
 	var ItemForm = function (_React$Component) {
 	    _inherits(ItemForm, _React$Component);
 
-	    function ItemForm() {
+	    function ItemForm(props) {
 	        _classCallCheck(this, ItemForm);
 
-	        var _this = _possibleConstructorReturn(this, (ItemForm.__proto__ || Object.getPrototypeOf(ItemForm)).call(this));
+	        var _this = _possibleConstructorReturn(this, (ItemForm.__proto__ || Object.getPrototypeOf(ItemForm)).call(this, props));
 
 	        _this.state = {
-	            cover: '',
+	            cover: _this.props.cover || '',
 	            images: [],
 	            warningMessage: ''
 	        };
@@ -968,7 +968,8 @@ webpackJsonp([0],[
 	        value: function setCover(image) {
 	            var _this2 = this;
 
-	            return function () {
+	            return function (e) {
+	                e.preventDefault();
 	                _this2.setState({
 	                    cover: image
 	                });
@@ -980,24 +981,31 @@ webpackJsonp([0],[
 	            var _this3 = this;
 
 	            var images = e.target.files;
+	            var imagesLength = images.length;
 
-	            if (images.length > 4) {
+	            if (imagesLength > 4) {
 	                this.setState({ warningMessage: 'You choose ' + images.length + ' files. Only 4 files allowed!' });
 	            }
 
-	            for (var i = 0; i < 4; i++) {
-	                if (images[i].type.match('image.*')) {
-	                    var reader = new FileReader();
+	            for (var i = 0, image; image = images[i]; i++) {
 
-	                    reader.onload = function (e) {
+	                if (i === 4) break;
+	                if (!image.type.match('image.*')) continue;
+
+	                var reader = new FileReader();
+
+	                reader.onload = function (image) {
+	                    return function (e) {
 	                        _this3.setState({
-	                            images: _this3.state.images.concat(e.target.result)
+	                            images: _this3.state.images.concat({
+	                                name: image.name,
+	                                base64: e.target.result
+	                            })
 	                        });
-	                        console.log(_this3.state.images);
 	                    };
+	                }(image);
 
-	                    reader.readAsDataURL(images[i]);
-	                }
+	                reader.readAsDataURL(image);
 	            }
 	        }
 	    }, {
@@ -1008,6 +1016,7 @@ webpackJsonp([0],[
 	                _id = _props._id,
 	                name = _props.name,
 	                price = _props.price,
+	                images = _props.images,
 	                dispatch = _props.dispatch;
 
 
@@ -1015,7 +1024,9 @@ webpackJsonp([0],[
 	                var item = {
 	                    _id: null || _id,
 	                    name: this.name.value || name,
-	                    price: this.price.value || price
+	                    price: this.price.value || price,
+	                    cover: this.state.cover.name,
+	                    images: this.state.images || images
 	                };
 
 	                switch (this.props.type) {
@@ -1053,7 +1064,7 @@ webpackJsonp([0],[
 	                    return React.createElement(
 	                        'div',
 	                        { className: 'col-sm-3', key: index },
-	                        React.createElement('img', { src: image, className: 'img-responsive' }),
+	                        React.createElement('img', { src: image.base64, className: 'img-responsive' }),
 	                        React.createElement(
 	                            'button',
 	                            { onClick: _this4.setCover(image), className: 'btn btn-success' },
@@ -1069,7 +1080,7 @@ webpackJsonp([0],[
 	                React.createElement(
 	                    'div',
 	                    { className: 'col-sm-offset-2 col-sm-4' },
-	                    React.createElement('img', { className: 'img-responsive', src: cover })
+	                    React.createElement('img', { className: 'img-responsive', src: cover.base64 })
 	                ),
 	                React.createElement(
 	                    'div',
